@@ -27,7 +27,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Quit"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
@@ -40,7 +41,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_Quit">
+  <action name="actionQuit">
    <property name="text">
     <string>&amp;Quit</string>
    </property>

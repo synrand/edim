@@ -42,5 +42,5 @@ void MainWindow::setupDatabase()
 
 void MainWindow::setupConnections()
 {
-    connect(action_Quit, &QAction::triggered, this, &QMainWindow::close);
+    connect(actionQuit, &QAction::triggered, this, &QMainWindow::close);
 }
