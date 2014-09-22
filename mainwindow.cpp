@@ -8,10 +8,20 @@
 Q_LOGGING_CATEGORY(EDIM, "edim")
 
 MainWindow::MainWindow(QWidget* parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    _libraryModel(this)
 {
     setupDatabase();
+
+    setupModel();
+
     setupUi(this);
+    treeViewLibrary->setModel(&_libraryModel);
+    treeViewLibrary->setRootIndex(_libraryModel.index(_libraryModel.rootPath()));
+    treeViewLibrary->hideColumn(1);
+    treeViewLibrary->hideColumn(2);
+    treeViewLibrary->hideColumn(3);
+
     setupConnections();
 }
 
@@ -38,6 +48,12 @@ void MainWindow::setupDatabase()
     if (!q.exec("PRAGMA foreign_keys = ON")) {
         qCWarning(EDIM) << "Could not enable FOREIGN KEY support";
     }
+}
+
+void MainWindow::setupModel()
+{
+    QDir documentsLocation(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    _libraryModel.setRootPath(documentsLocation.absolutePath());
 }
 
 void MainWindow::setupConnections()

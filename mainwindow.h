@@ -3,6 +3,7 @@
 
 #include "ui_mainwindow.h"
 
+#include <QFileSystemModel>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(EDIM)
@@ -15,7 +16,10 @@ public:
     explicit MainWindow(QWidget* parent = 0);
 
 private:
+    QFileSystemModel _libraryModel;
+
     void setupDatabase();
+    void setupModel();
     void setupConnections();
 };
 
