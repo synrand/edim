@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget* parent) :
     treeViewLibrary->hideColumn(3);
 
     setupConnections();
+    readSettings();
 }
 
 void MainWindow::initializeSettings()
@@ -81,6 +82,29 @@ void MainWindow::setupConnections()
 
     // UI elements
     connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::import);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    writeSettings();
+
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    settings.endGroup();
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("geometry", saveGeometry());
+    settings.endGroup();
 }
 
 void MainWindow::import(const QModelIndex& index) const

@@ -26,6 +26,10 @@ private:
     void setupModel();
     void setupConnections();
 
+    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+    void readSettings();
+    void writeSettings();
+
 private slots:
     void import(const QModelIndex& index) const;
 };
