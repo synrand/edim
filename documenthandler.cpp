@@ -16,7 +16,7 @@ void DocumentHandler::import(const QFileInfo& document) const
 
     QSettings settings;
     QString basePath(settings.value("library/basePath").toString());
-    QString libraryPath(document.absoluteFilePath().remove(0, basePath.length()));
+    QString libraryPath(document.absoluteFilePath().replace(0, basePath.length(), "."));
 
     QSqlQuery q;
     q.prepare("INSERT INTO document (libraryPath, content) VALUES (:libraryPath, :content)");
