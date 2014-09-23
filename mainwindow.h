@@ -3,6 +3,8 @@
 
 #include "ui_mainwindow.h"
 
+#include "documenthandler.h"
+
 #include <QFileSystemModel>
 #include <QLoggingCategory>
 
@@ -16,11 +18,16 @@ public:
     explicit MainWindow(QWidget* parent = 0);
 
 private:
+    DocumentHandler _documentHandler;
     QFileSystemModel _libraryModel;
 
+    void initializeSettings();
     void setupDatabase();
     void setupModel();
     void setupConnections();
+
+private slots:
+    void import(const QModelIndex& index) const;
 };
 
 #endif // MAINWINDOW_H

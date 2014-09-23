@@ -7,9 +7,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    documenthandler.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    documenthandler.h
 
 FORMS    += mainwindow.ui
 

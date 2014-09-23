@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     _libraryModel(this)
 {
+    initializeSettings();
     setupDatabase();
-
     setupModel();
 
     setupUi(this);
@@ -24,6 +24,18 @@ MainWindow::MainWindow(QWidget* parent) :
     treeViewLibrary->hideColumn(3);
 
     setupConnections();
+}
+
+void MainWindow::initializeSettings()
+{
+    QSettings settings;
+
+    // Initialize default values
+    settings.beginGroup("library");
+    if (!settings.value("basePath").isValid()) {
+        settings.setValue("basePath", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    }
+    settings.endGroup();
 }
 
 void MainWindow::setupDatabase()
@@ -59,12 +71,19 @@ void MainWindow::setupModel()
 {
     QSettings settings;
 
-    QVariant defaultBasePath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    QDir documentsLocation(settings.value("library.basePath", defaultBasePath).toString());
-    _libraryModel.setRootPath(documentsLocation.absolutePath());
+    _libraryModel.setRootPath(settings.value("library/basePath").toString());
 }
 
 void MainWindow::setupConnections()
 {
+    // Actions
     connect(actionQuit, &QAction::triggered, this, &QMainWindow::close);
+
+    // UI elements
+    connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::import);
+}
+
+void MainWindow::import(const QModelIndex& index) const
+{
+    _documentHandler.import(QFileInfo(_libraryModel.fileInfo(index)));
 }
