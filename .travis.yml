@@ -8,6 +8,7 @@ compiler:
 before_install:
     - sudo add-apt-repository --yes "deb http://archive.ubuntu.com/ubuntu trusty main"
     - sudo add-apt-repository --yes "deb http://archive.ubuntu.com/ubuntu trusty universe"
+    - sudo apt-get install -y aptitude
     - sudo aptitude update -q
 
 install:
