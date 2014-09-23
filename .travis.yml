@@ -12,4 +12,4 @@ before_install:
     
 script:
     - qmake -v
-    - make -j$(nproc)
+    - make
