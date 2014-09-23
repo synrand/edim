@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/rescan-document.png</file>
+        <file>icons/edim.png</file>
+    </qresource>
+</RCC>

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QDir>
+#include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QStandardPaths>
@@ -48,11 +49,18 @@ void MainWindow::setupDatabase()
     if (!q.exec("PRAGMA foreign_keys = ON")) {
         qCWarning(EDIM) << "Could not enable FOREIGN KEY support";
     }
+
+    if (!q.exec("CREATE TABLE IF NOT EXISTS document (id INTEGER PRIMARY KEY AUTOINCREMENT, libraryPath TEXT, content TEXT)")) {
+        qCWarning(EDIM) << "Could not create database layout";
+    }
 }
 
 void MainWindow::setupModel()
 {
-    QDir documentsLocation(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    QSettings settings;
+
+    QVariant defaultBasePath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    QDir documentsLocation(settings.value("library.basePath", defaultBasePath).toString());
     _libraryModel.setRootPath(documentsLocation.absolutePath());
 }
 
