@@ -103,6 +103,7 @@ void MainWindow::readSettings()
     QSettings settings;
     settings.beginGroup("MainWindow");
     restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("state").toByteArray());
     settings.endGroup();
 }
 
@@ -111,6 +112,7 @@ void MainWindow::writeSettings()
     QSettings settings;
     settings.beginGroup("MainWindow");
     settings.setValue("geometry", saveGeometry());
+    settings.setValue("state", saveState());
     settings.endGroup();
 }
 
