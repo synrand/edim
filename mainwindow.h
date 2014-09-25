@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 
 #include "documenthandler.h"
+#include "settingsdialog.h"
 
 #include <QFileSystemModel>
 #include <QLoggingCategory>
@@ -21,6 +22,8 @@ private:
     DocumentHandler _documentHandler;
     QFileSystemModel _libraryModel;
 
+    SettingsDialog* _settingsDialog;
+
     void initializeSettings();
     void setupDatabase();
     void setupModel();
@@ -32,6 +35,8 @@ private:
 
 private slots:
     void import(const QModelIndex& index) const;
+
+    void showSettings() const;
 };
 
 #endif // MAINWINDOW_H

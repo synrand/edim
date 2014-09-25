@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 
+#include "settingsdialog.h"
+
 #include <QDir>
 #include <QSettings>
 #include <QSqlDatabase>
@@ -10,7 +12,8 @@ Q_LOGGING_CATEGORY(EDIM, "edim")
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
-    _libraryModel(this)
+    _libraryModel(this),
+    _settingsDialog(new SettingsDialog(this))
 {
     initializeSettings();
     setupDatabase();
@@ -79,6 +82,7 @@ void MainWindow::setupConnections()
 {
     // Actions
     connect(actionQuit, &QAction::triggered, this, &QMainWindow::close);
+    connect(actionSettings, &QAction::triggered, _settingsDialog, &QDialog::show);
 
     // UI elements
     connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::import);
@@ -110,4 +114,9 @@ void MainWindow::writeSettings()
 void MainWindow::import(const QModelIndex& index) const
 {
     _documentHandler.import(QFileInfo(_libraryModel.fileInfo(index)));
+}
+
+void MainWindow::showSettings() const
+{
+    _settingsDialog->show();
 }
