@@ -12,6 +12,9 @@ public:
     DocumentHandler();
 
     void import(const QFileInfo& document) const;
+
+private:
+    QString text(const QFileInfo& document) const;
 };
 
 #endif // DOCUMENTHANDLER_H

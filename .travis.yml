@@ -12,7 +12,7 @@ before_install:
     - sudo aptitude update -q
 
 install:
-    - sudo aptitude install -y qt5-default
+    - sudo aptitude install -y qt5-default libtesseract-dev
     
 script:
     - qmake

@@ -6,6 +6,10 @@ CONFIG += c++11
 TARGET = edim
 TEMPLATE = app
 
+LIBS += \
+    -ltesseract \
+    -llept
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
