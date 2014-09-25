@@ -3,6 +3,7 @@
 #include "settingsdialog.h"
 
 #include <QDir>
+#include <QGraphicsPixmapItem>
 #include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -25,6 +26,7 @@ MainWindow::MainWindow(QWidget* parent) :
     treeViewLibrary->hideColumn(1);
     treeViewLibrary->hideColumn(2);
     treeViewLibrary->hideColumn(3);
+    graphicsViewPreview->setScene(&_previewScene);
 
     setupConnections();
     readSettings();
@@ -86,6 +88,7 @@ void MainWindow::setupConnections()
 
     // UI elements
     connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::import);
+    connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::showDocument);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -119,4 +122,14 @@ void MainWindow::import(const QModelIndex& index) const
 void MainWindow::showSettings() const
 {
     _settingsDialog->show();
+}
+
+void MainWindow::showDocument(const QModelIndex& index)
+{
+    _previewScene.clear();
+
+    // TODO add sanity checks
+    QFileInfo document(_libraryModel.fileInfo(index));
+    _previewScene.addItem(new QGraphicsPixmapItem(QPixmap::fromImage(QImage(document.absoluteFilePath()))));
+    graphicsViewPreview->fitInView(_previewScene.sceneRect(), Qt::KeepAspectRatio);
 }

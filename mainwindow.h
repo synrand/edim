@@ -7,6 +7,7 @@
 #include "settingsdialog.h"
 
 #include <QFileSystemModel>
+#include <QGraphicsScene>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(EDIM)
@@ -21,6 +22,7 @@ public:
 private:
     DocumentHandler _documentHandler;
     QFileSystemModel _libraryModel;
+    QGraphicsScene _previewScene;
 
     SettingsDialog* _settingsDialog;
 
@@ -37,6 +39,8 @@ private slots:
     void import(const QModelIndex& index) const;
 
     void showSettings() const;
+
+    void showDocument(const QModelIndex& index);
 };
 
 #endif // MAINWINDOW_H

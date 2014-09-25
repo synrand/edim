@@ -25,7 +25,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeView" name="treeViewLibrary"/>
-      <widget class="QGraphicsView" name="graphicsView"/>
+      <widget class="QGraphicsView" name="graphicsViewPreview"/>
      </widget>
     </item>
    </layout>
