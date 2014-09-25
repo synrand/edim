@@ -15,6 +15,8 @@ private:
 
 private slots:
     void setCategory(QListWidgetItem* current, QListWidgetItem* previous);
+
+    void setBasePath();
 };
 
 #endif // SETTINGSDIALOG_H
