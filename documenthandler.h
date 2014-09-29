@@ -9,6 +9,8 @@ Q_DECLARE_LOGGING_CATEGORY(EDIM_DOCUMENTHANDLER)
 class DocumentHandler
 {
 public:
+    static QStringList supportedFileTypes();
+
     DocumentHandler();
 
     QString text(const QFileInfo& document) const;

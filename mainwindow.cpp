@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 
+#include "documenthandler.h"
 #include "settingsdialog.h"
 
 #include <QDir>
@@ -34,6 +35,7 @@ MainWindow::MainWindow(QWidget* parent) :
 void MainWindow::setupModel()
 {
     _libraryModel.setRootPath(_library.basePath().absolutePath());
+    _libraryModel.setNameFilters(DocumentHandler::supportedFileTypes());
 }
 
 void MainWindow::setupConnections()

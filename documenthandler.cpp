@@ -9,6 +9,16 @@
 
 Q_LOGGING_CATEGORY(EDIM_DOCUMENTHANDLER, "edim.DocumentHandler")
 
+QStringList DocumentHandler::supportedFileTypes()
+{
+    QStringList result = {
+        "*.jpg",
+        "*.png"
+    };
+
+    return result;
+}
+
 DocumentHandler::DocumentHandler()
 {
 }
