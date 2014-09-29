@@ -2,8 +2,7 @@
 
 #include <tesseract/baseapi.h>
 
-#include <leptonica/allheaders.h>
-
+#include <QImage>
 #include <QSettings>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -44,15 +43,14 @@ QString DocumentHandler::text(const QFileInfo& document) const
         qCWarning(EDIM_DOCUMENTHANDLER) << "Could not initialize OCR library.";
     }
 
-    Pix* image(pixRead(document.absoluteFilePath().toStdString().c_str()));
-    ocr->SetImage(image);
+    QImage image(document.absoluteFilePath());
+    ocr->SetImage(image.bits(), image.width(), image.height(), image.depth() / 8, image.bytesPerLine());
     QString result(ocr->GetUTF8Text());
 
     // Restore locale
     setlocale(LC_NUMERIC, currentLocale.c_str());
 
     // Clean up
-    pixDestroy(&image);
     ocr->End();
 
     return result;

@@ -7,8 +7,7 @@ TARGET = edim
 TEMPLATE = app
 
 LIBS += \
-    -ltesseract \
-    -llept
+    -ltesseract
 
 SOURCES += \
     main.cpp \
