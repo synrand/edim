@@ -13,11 +13,10 @@ Q_LOGGING_CATEGORY(EDIM, "edim")
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
+    _library(this),
     _libraryModel(this),
     _settingsDialog(new SettingsDialog(this))
 {
-    initializeSettings();
-    setupDatabase();
     setupModel();
 
     setupUi(this);
@@ -32,52 +31,9 @@ MainWindow::MainWindow(QWidget* parent) :
     readSettings();
 }
 
-void MainWindow::initializeSettings()
-{
-    QSettings settings;
-
-    // Initialize default values
-    settings.beginGroup("library");
-    if (!settings.value("basePath").isValid()) {
-        settings.setValue("basePath", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    }
-    settings.endGroup();
-}
-
-void MainWindow::setupDatabase()
-{
-    // Check data location
-    QDir dataLocation(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-    if (!dataLocation.exists()) {
-        if (!dataLocation.mkpath(".")) {
-            qCCritical(EDIM) << "Could not access data location at" << dataLocation.absolutePath();
-        }
-    }
-
-    // Connect to database
-    QString databaseFile(dataLocation.absolutePath().append(QDir::separator()).append("data.sqlite"));
-    QSqlDatabase database(QSqlDatabase::addDatabase("QSQLITE"));
-    database.setDatabaseName(databaseFile);
-    if (!database.open()) {
-        qCCritical(EDIM) << "Could not connect to database";
-    }
-
-    // Enable FOREIGN KEY support
-    QSqlQuery q;
-    if (!q.exec("PRAGMA foreign_keys = ON")) {
-        qCWarning(EDIM) << "Could not enable FOREIGN KEY support";
-    }
-
-    if (!q.exec("CREATE TABLE IF NOT EXISTS document (id INTEGER PRIMARY KEY AUTOINCREMENT, libraryPath TEXT, content TEXT)")) {
-        qCWarning(EDIM) << "Could not create database layout";
-    }
-}
-
 void MainWindow::setupModel()
 {
-    QSettings settings;
-
-    _libraryModel.setRootPath(settings.value("library/basePath").toString());
+    _libraryModel.setRootPath(_library.basePath().absolutePath());
 }
 
 void MainWindow::setupConnections()
@@ -87,7 +43,7 @@ void MainWindow::setupConnections()
     connect(actionSettings, &QAction::triggered, _settingsDialog, &QDialog::show);
 
     // UI elements
-    connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::import);
+    connect(actionImport, &QAction::triggered, this, &MainWindow::importDocument);
     connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::showDocument);
 }
 
@@ -116,14 +72,21 @@ void MainWindow::writeSettings()
     settings.endGroup();
 }
 
-void MainWindow::import(const QModelIndex& index) const
-{
-    _documentHandler.import(QFileInfo(_libraryModel.fileInfo(index)));
-}
-
 void MainWindow::showSettings() const
 {
     _settingsDialog->show();
+}
+
+void MainWindow::importDocument()
+{
+    QFileInfo document(_libraryModel.fileInfo(treeViewLibrary->currentIndex()));
+
+    if (!_library.contains(document)) {
+        _library.import(document);
+    } else {
+        // TODO Add an "Update entry instead?" dialog here
+        qCDebug(EDIM) << "Library already contains document" << document.absoluteFilePath();
+    }
 }
 
 void MainWindow::showDocument(const QModelIndex& index)

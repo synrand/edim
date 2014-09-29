@@ -3,7 +3,7 @@
 
 #include "ui_mainwindow.h"
 
-#include "documenthandler.h"
+#include "library.h"
 #include "settingsdialog.h"
 
 #include <QFileSystemModel>
@@ -20,14 +20,12 @@ public:
     explicit MainWindow(QWidget* parent = 0);
 
 private:
-    DocumentHandler _documentHandler;
+    Library _library;
     QFileSystemModel _libraryModel;
     QGraphicsScene _previewScene;
 
     SettingsDialog* _settingsDialog;
 
-    void initializeSettings();
-    void setupDatabase();
     void setupModel();
     void setupConnections();
 
@@ -36,10 +34,9 @@ private:
     void writeSettings();
 
 private slots:
-    void import(const QModelIndex& index) const;
-
     void showSettings() const;
 
+    void importDocument();
     void showDocument(const QModelIndex& index);
 };
 

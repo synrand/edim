@@ -13,24 +13,6 @@ DocumentHandler::DocumentHandler()
 {
 }
 
-void DocumentHandler::import(const QFileInfo& document) const
-{
-    // TODO read document contents
-
-    QSettings settings;
-    QString basePath(settings.value("library/basePath").toString());
-    QString libraryPath(document.absoluteFilePath().replace(0, basePath.length(), "."));
-
-    QSqlQuery q;
-    q.prepare("INSERT INTO document (libraryPath, content) VALUES (:libraryPath, :content)");
-    q.bindValue(":libraryPath", libraryPath);
-    q.bindValue(":content", text(document));
-
-    if (!q.exec()) {
-        qCWarning(EDIM_DOCUMENTHANDLER) << "Could not insert document into database" << q.lastError();
-    }
-}
-
 QString DocumentHandler::text(const QFileInfo& document) const
 {
     // tesseract crashes with LC_NUMERIC != C

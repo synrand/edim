@@ -13,12 +13,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     documenthandler.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    library.cpp
 
 HEADERS += \
     mainwindow.h \
     documenthandler.h \
-    settingsdialog.h
+    settingsdialog.h \
+    library.h
 
 FORMS += \
     mainwindow.ui \

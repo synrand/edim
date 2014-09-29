@@ -11,9 +11,6 @@ class DocumentHandler
 public:
     DocumentHandler();
 
-    void import(const QFileInfo& document) const;
-
-private:
     QString text(const QFileInfo& document) const;
 };
 
