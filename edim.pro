@@ -14,13 +14,15 @@ SOURCES += \
     mainwindow.cpp \
     documenthandler.cpp \
     settingsdialog.cpp \
-    library.cpp
+    library.cpp \
+    setupwizard.cpp
 
 HEADERS += \
     mainwindow.h \
     documenthandler.h \
     settingsdialog.h \
-    library.h
+    library.h \
+    setupwizard.h
 
 FORMS += \
     mainwindow.ui \

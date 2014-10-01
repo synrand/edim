@@ -2,6 +2,7 @@
 
 #include "documenthandler.h"
 #include "settingsdialog.h"
+#include "setupwizard.h"
 
 #include <QDir>
 #include <QGraphicsPixmapItem>
