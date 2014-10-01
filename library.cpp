@@ -29,7 +29,7 @@ bool Library::contains(const QFileInfo& document) const
     q.bindValue(":libraryPath", libraryPath(document));
     q.exec();
 
-    // Size hack for SQLite since it doesn't support .size() :-(
+    // TODO: Size hack for SQLite since it doesn't support .size() :-(
     q.last();
     return q.at() + 1 > 0;
 }
