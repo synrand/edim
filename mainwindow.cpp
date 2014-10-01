@@ -47,6 +47,7 @@ void MainWindow::setupConnections()
     // UI elements
     connect(actionImport, &QAction::triggered, this, &MainWindow::importDocument);
     connect(treeViewLibrary, &QTreeView::clicked, this, &MainWindow::showDocument);
+    connect(lineEditSearch, &QLineEdit::textChanged, this, &MainWindow::searchDocument);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -99,4 +100,24 @@ void MainWindow::showDocument(const QModelIndex& index)
     QFileInfo document(_libraryModel.fileInfo(index));
     _previewScene.addItem(new QGraphicsPixmapItem(QPixmap::fromImage(QImage(document.absoluteFilePath()))));
     graphicsViewPreview->fitInView(_previewScene.sceneRect(), Qt::KeepAspectRatio);
+}
+
+void MainWindow::searchDocument(const QString& text)
+{
+    QList<QFileInfo> matchingFiles(_library.search(text));
+
+    qCDebug(EDIM) << matchingFiles.size();
+    if (matchingFiles.isEmpty()) {
+        _libraryModel.setNameFilters(DocumentHandler::supportedFileTypes());
+    } else {
+        QStringList names;
+        foreach (const QFileInfo& document, matchingFiles) {
+            // FIXME introduce proxy model since name filter doesn't apply to pathes
+            names.append(document.absoluteFilePath());
+        }
+
+        names.append(DocumentHandler::supportedFileTypes());
+
+        _libraryModel.setNameFilters(names);
+    }
 }

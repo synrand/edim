@@ -34,6 +34,23 @@ bool Library::contains(const QFileInfo& document) const
     return q.at() + 1 > 0;
 }
 
+QList<QFileInfo> Library::search(const QString& text) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT libraryPath FROM document WHERE content LIKE :searchTerm");
+    q.bindValue(":searchTerm", QString("%%1%").arg(text));
+    q.exec();
+
+    QList<QFileInfo> result;
+    QString base(basePath().absolutePath());
+    while (q.next()) {
+        QString path(q.value("libraryPath").toString());
+        result.append(QFileInfo(path.replace(0, 1, base)));
+    }
+
+    return result;
+}
+
 void Library::import(const QFileInfo& document)
 {
     QSqlQuery q;

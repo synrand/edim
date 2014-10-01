@@ -38,6 +38,7 @@ private slots:
 
     void importDocument();
     void showDocument(const QModelIndex& index);
+    void searchDocument(const QString& text);
 };
 
 #endif // MAINWINDOW_H

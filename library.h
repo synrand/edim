@@ -7,6 +7,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QList>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(EDIM_LIBRARY)
@@ -19,6 +20,8 @@ public:
     QDir basePath() const;
 
     bool contains(const QFileInfo& document) const;
+
+    QList<QFileInfo> search(const QString& text) const;
 
 public slots:
     void import(const QFileInfo& document);
