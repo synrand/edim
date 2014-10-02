@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 
-#include "documenthandler.h"
 #include "settingsdialog.h"
 
 #include <QDir>
@@ -15,14 +14,11 @@ Q_LOGGING_CATEGORY(EDIM, "edim")
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     _library(this),
-    _libraryModel(this),
     _settingsDialog(new SettingsDialog(this))
 {
-    setupModel();
-
     setupUi(this);
-    treeViewLibrary->setModel(&_libraryModel);
-    treeViewLibrary->setRootIndex(_libraryModel.index(_libraryModel.rootPath()));
+    treeViewLibrary->setModel(&_library);
+    treeViewLibrary->setRootIndex(_library.index(QFileInfo(_library.basePath().absolutePath())));
     treeViewLibrary->hideColumn(1);
     treeViewLibrary->hideColumn(2);
     treeViewLibrary->hideColumn(3);
@@ -30,12 +26,6 @@ MainWindow::MainWindow(QWidget* parent) :
 
     setupConnections();
     readSettings();
-}
-
-void MainWindow::setupModel()
-{
-    _libraryModel.setRootPath(_library.basePath().absolutePath());
-    _libraryModel.setNameFilters(DocumentHandler::supportedFileTypes());
 }
 
 void MainWindow::setupConnections()
@@ -82,7 +72,7 @@ void MainWindow::showSettings() const
 
 void MainWindow::importDocument()
 {
-    QFileInfo document(_libraryModel.fileInfo(treeViewLibrary->currentIndex()));
+    QFileInfo document(_library.fileInfo(treeViewLibrary->currentIndex()));
 
     if (!_library.contains(document)) {
         _library.import(document);
@@ -97,7 +87,7 @@ void MainWindow::showDocument(const QModelIndex& index)
     _previewScene.clear();
 
     // TODO add sanity checks
-    QFileInfo document(_libraryModel.fileInfo(index));
+    QFileInfo document(_library.fileInfo(index));
     _previewScene.addItem(new QGraphicsPixmapItem(QPixmap::fromImage(QImage(document.absoluteFilePath()))));
     graphicsViewPreview->fitInView(_previewScene.sceneRect(), Qt::KeepAspectRatio);
 }
@@ -108,7 +98,8 @@ void MainWindow::searchDocument(const QString& text)
 
     qCDebug(EDIM) << matchingFiles.size();
     if (matchingFiles.isEmpty()) {
-        _libraryModel.setNameFilters(DocumentHandler::supportedFileTypes());
+        // FIXME filtering currently not yet supported in new library model
+//        _libraryModel.setNameFilters(DocumentHandler::supportedFileTypes());
     } else {
         QStringList names;
         foreach (const QFileInfo& document, matchingFiles) {
@@ -118,6 +109,6 @@ void MainWindow::searchDocument(const QString& text)
 
         names.append(DocumentHandler::supportedFileTypes());
 
-        _libraryModel.setNameFilters(names);
+//        _libraryModel.setNameFilters(names);
     }
 }

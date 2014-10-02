@@ -11,9 +11,13 @@
 Q_LOGGING_CATEGORY(EDIM_LIBRARY, "edim.Library")
 
 Library::Library(QObject* parent) :
-    QObject(parent)
+    QSortFilterProxyModel(parent),
+    _sourceModel(this)
 {
     setupDatabase();
+
+    _sourceModel.setRootPath(basePath().absolutePath());
+    setSourceModel(&_sourceModel);
 }
 
 QDir Library::basePath() const
@@ -49,6 +53,16 @@ QList<QFileInfo> Library::search(const QString& text) const
     }
 
     return result;
+}
+
+QModelIndex Library::index(const QFileInfo& document) const
+{
+    return mapFromSource(_sourceModel.index(document.absoluteFilePath()));
+}
+
+QFileInfo Library::fileInfo(const QModelIndex& index) const
+{
+    return _sourceModel.fileInfo(mapToSource(index));
 }
 
 void Library::import(const QFileInfo& document)

@@ -6,7 +6,6 @@
 #include "library.h"
 #include "settingsdialog.h"
 
-#include <QFileSystemModel>
 #include <QGraphicsScene>
 #include <QLoggingCategory>
 
@@ -21,7 +20,6 @@ public:
 
 private:
     Library _library;
-    QFileSystemModel _libraryModel;
     QGraphicsScene _previewScene;
 
     SettingsDialog* _settingsDialog;

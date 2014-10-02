@@ -1,18 +1,19 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-#include <QObject>
+#include <QSortFilterProxyModel>
 
 #include "documenthandler.h"
 
 #include <QDir>
 #include <QFileInfo>
+#include <QFileSystemModel>
 #include <QList>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(EDIM_LIBRARY)
 
-class Library : public QObject
+class Library : public QSortFilterProxyModel
 {
 public:
     Library(QObject* parent = nullptr);
@@ -23,11 +24,17 @@ public:
 
     QList<QFileInfo> search(const QString& text) const;
 
+    using QSortFilterProxyModel::index;
+    QModelIndex index(const QFileInfo& document) const;
+
+    QFileInfo fileInfo(const QModelIndex& index) const;
+
 public slots:
     void import(const QFileInfo& document);
     void update(const QFileInfo& document);
 
 private:
+    QFileSystemModel _sourceModel;
     DocumentHandler _documentHandler;
 
     void setupDatabase();
