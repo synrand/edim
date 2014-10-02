@@ -10,6 +10,9 @@ class SettingsDialog : public QDialog, private Ui::SettingsDialog
 public:
     explicit SettingsDialog(QWidget* parent = 0);
 
+public slots:
+    void accept() Q_DECL_OVERRIDE;
+
 private:
     void setupConnections();
 

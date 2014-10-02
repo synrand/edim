@@ -3,5 +3,7 @@
         <file>icons/rescan-document.png</file>
         <file>icons/edim.png</file>
         <file>icons/library.png</file>
+        <file>icons/flag_de.png</file>
+        <file>icons/flag_us.png</file>
     </qresource>
 </RCC>

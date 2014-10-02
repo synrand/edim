@@ -8,13 +8,34 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
 {
     setupUi(this);
     QSettings settings;
+
+    // Library
     lineEditBasePath->setText(settings.value("library/basePath").toString());
+
+    // OCR
+    comboBoxOCRLanguage->addItem(QIcon(":icons/flag_us.png"), tr("English"), QVariant("eng"));
+    comboBoxOCRLanguage->addItem(QIcon(":icons/flag_de.png"), tr("German"), QVariant("deu"));
+
+    int current = comboBoxOCRLanguage->findData(settings.value("ocr/language"));
+    if (current < 0) {
+        current = 0;
+    }
+
+    comboBoxOCRLanguage->setCurrentIndex(current);
 
     setupConnections();
 }
 
+void SettingsDialog::accept()
+{
+    // TODO save settings here
+    QDialog::accept();
+}
+
 void SettingsDialog::setupConnections()
 {
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &SettingsDialog::accept);
+
     connect(listWidgetCategory, &QListWidget::currentItemChanged, this, &SettingsDialog::setCategory);
 
     connect(toolButtonBasePath, &QToolButton::clicked, this, &SettingsDialog::setBasePath);
