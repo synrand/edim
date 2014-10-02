@@ -65,6 +65,24 @@ QFileInfo Library::fileInfo(const QModelIndex& index) const
     return _sourceModel.fileInfo(mapToSource(index));
 }
 
+QVariant Library::data(const QModelIndex& index, int role) const
+{
+    // Enhance source model with data from database
+    if (role == DocumentContentRole) {
+        QSqlQuery q;
+        q.prepare("SELECT content FROM document WHERE libraryPath = :path");
+        q.bindValue(":path", libraryPath(fileInfo(index)));
+        q.exec();
+        if (q.next()) {
+            return q.value(0);
+        } else {
+            return QVariant();
+        }
+    }
+
+    return QSortFilterProxyModel::data(index, role);
+}
+
 void Library::import(const QFileInfo& document)
 {
     QSqlQuery q;

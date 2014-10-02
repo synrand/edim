@@ -90,6 +90,8 @@ void MainWindow::showDocument(const QModelIndex& index)
     QFileInfo document(_library.fileInfo(index));
     _previewScene.addItem(new QGraphicsPixmapItem(QPixmap::fromImage(QImage(document.absoluteFilePath()))));
     graphicsViewPreview->fitInView(_previewScene.sceneRect(), Qt::KeepAspectRatio);
+
+    qCDebug(EDIM) << _library.data(index, Library::DocumentContentRole).toString();
 }
 
 void MainWindow::searchDocument(const QString& text)

@@ -16,6 +16,10 @@ Q_DECLARE_LOGGING_CATEGORY(EDIM_LIBRARY)
 class Library : public QSortFilterProxyModel
 {
 public:
+    enum ItemDataRole {
+        DocumentContentRole = Qt::UserRole
+    };
+
     Library(QObject* parent = nullptr);
 
     QDir basePath() const;
@@ -28,6 +32,8 @@ public:
     QModelIndex index(const QFileInfo& document) const;
 
     QFileInfo fileInfo(const QModelIndex& index) const;
+
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
 public slots:
     void import(const QFileInfo& document);
